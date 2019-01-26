@@ -10,13 +10,16 @@ import com.example.demo.person.PersonRepository;
 
 @Component
 public class DemoApplicationRunner implements ApplicationRunner {
-	
+
 	@Autowired
 	private PersonRepository personRepository;
-	
+
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
-		personRepository.save(new Person());
+		Person person = new Person();
+		person.setVorname("Christian");
+		person.setNachname("Trutz");
+		personRepository.save(person);
 	}
 
 }
