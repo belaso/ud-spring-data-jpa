@@ -1,5 +1,8 @@
 package com.example.demo;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,10 +29,33 @@ public class DemoApplicationRunner implements ApplicationRunner {
 		person.setVorname("Christian");
 		person.setNachname("Trutz");
 		personRepository.save(person);
-		logger.info("Entity angelegt.");
+		logger.info("Entity angelegt mit Id: {}.", person.getId());
 
-		// Entity finden
-		logger.info("Anzahl gefundene Objekte: {}.", personRepository.findAll().size());
+		// Entities anlegen (ineffizient), ca. 70ms für 100 Einträge (in-memory
+		// Datenbank)
+		for (int i = 0; i < 100000; i++) {
+			Person testEntity = new Person();
+			testEntity.setVorname("John");
+			testEntity.setNachname("Doe " + i);
+			personRepository.saveAndFlush(testEntity);
+		}
+		logger.info("Entities anlegen (ineffizient)");
+
+		// Entities anlegen (effizient)
+		List<Person> testEntities = new LinkedList<>();
+		for (int i = 0; i < 100000; i++) {
+			Person testEntity = new Person();
+			testEntity.setVorname("John");
+			testEntity.setNachname("Doe " + i);
+			testEntities.add(testEntity);
+		}
+		personRepository.saveAll(testEntities);
+		logger.info("Entities anlegen (effizient)");
+
+		// Anzahl Entities ausgeben
+		logger.info("Anzahl gefundene Objekte (ineffizient): {}.", personRepository.findAll().size());
+		// und jetzt effizient
+		logger.info("Anzahl gefundene Objekte (effizient): {}.", personRepository.count());
 	}
 
 }
