@@ -1,8 +1,12 @@
 package com.example.demo.person;
 
+import java.util.Set;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -17,10 +21,16 @@ public class Person {
 
 	@Getter
 	@Setter
-	private String vorname;
+	private String name;
 
+	@ManyToOne
 	@Getter
 	@Setter
-	private String nachname;
+	private Person parent;
+
+	@OneToMany(mappedBy = "parent")
+	@Getter
+	@Setter
+	private Set<Person> children;
 
 }

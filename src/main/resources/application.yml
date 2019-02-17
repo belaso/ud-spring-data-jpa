@@ -2,8 +2,8 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: false
+    show-sql: true
 logging:
   level:
     root: error
-    com.example.demo: info
+    com.example.demo: trace
